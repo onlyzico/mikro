@@ -13,7 +13,7 @@ function mikro()
  */
 function is_ssl()
 {
-    return arr_get($_SERVER, 'HTTPS') === 'on' || arr_get($_SERVER, 'HTTP_X_FORWARDED_PROTO') === 'https' || arr_get($_SERVER, 'HTTP_X_FORWARDED_SSL') === 'https' || strpos(arr_get($_SERVER, 'HTTP_CF_VISITOR'), 'https') !== false;
+    return arr_get($_SERVER, 'HTTPS') === 'on' || arr_get($_SERVER, 'HTTP_X_FORWARDED_PROTO') === 'https' || arr_get($_SERVER, 'HTTP_X_FORWARDED_SSL') === 'https' || strpos(arr_get($_SERVER, 'HTTP_CF_VISITOR'), 'https' ) !== false;
 }
 
 /**
