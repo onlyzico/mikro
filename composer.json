@@ -1,0 +1,20 @@
+{
+    "name": "onlyzico/mikro",
+    "description": "A micro framework.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zico",
+            "email": "onlyzicoo@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mikro\\": "src/"
+        },
+        "files": ["src/helper.php"]
+    }
+}
