@@ -186,7 +186,7 @@ function arr_sort(array $args)
  */
 function arr_trim(array $array)
 {
-    return array_values(array_filter(array_map('trim', $array)));
+    return array_unique(array_values(array_filter(array_map('trim', $array))));
 }
 
 /**
