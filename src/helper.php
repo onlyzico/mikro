@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @return \Mikro
+ * @return \Mikro\Mikro
  */
 function mikro()
 {

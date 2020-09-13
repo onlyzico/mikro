@@ -84,12 +84,12 @@ class Mikro
     protected $body;
 
     /**
-     * @var \Mikro
+     * @var \Mikro\Mikro
      */
     protected static $instance;
 
     /**
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public static function create()
     {
@@ -345,7 +345,7 @@ class Mikro
      * @param string $method
      * @param array $args
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      *
      * @throws \ErrorException
      */
@@ -363,7 +363,7 @@ class Mikro
      * @param string $pattern
      * @param array $args
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      *
      * @throws \ErrorException
      */
@@ -394,7 +394,7 @@ class Mikro
      * @param string $pattern
      * @param array $args
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function addRoute(array $method, string $pattern, ...$args)
     {
@@ -628,7 +628,7 @@ class Mikro
     /**
      * @param int $status
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function status(int $status)
     {
@@ -648,7 +648,7 @@ class Mikro
     /**
      * @param string $encoding
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function encoding(string $encoding)
     {
@@ -669,7 +669,7 @@ class Mikro
      * @param string|int $key
      * @param string|null $value
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function header($key, string $value = null)
     {
@@ -685,7 +685,7 @@ class Mikro
     /**
      * @param array $headers
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function headers(array $headers)
     {
@@ -700,7 +700,7 @@ class Mikro
      * @param string $url
      * @param int $status
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function redirect(string $url, int $status = 302)
     {
@@ -711,7 +711,7 @@ class Mikro
      * @param string $name
      * @param array $params
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function routeRedirect(string $name, array $params = [])
     {
@@ -723,7 +723,7 @@ class Mikro
     /**
      * @param string $type
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function type(string $type)
     {
@@ -766,7 +766,7 @@ class Mikro
      * @param mixed $body
      * @param int $status
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function body($body, int $status = 200)
     {
@@ -779,7 +779,7 @@ class Mikro
      * @param array $payload
      * @param int $status
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function json(array $payload, int $status = 200)
     {
@@ -790,7 +790,7 @@ class Mikro
      * @param string $xml
      * @param int $status
      *
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function xml(string $xml, int $status = 200)
     {
@@ -844,7 +844,7 @@ class Mikro
     }
 
     /**
-     * @return \Mikro
+     * @return \Mikro\Mikro
      */
     public function removeBody()
     {
