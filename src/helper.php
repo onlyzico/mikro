@@ -5,7 +5,7 @@
  */
 function mikro()
 {
-    return Mikro::create();
+    return Mikro\Mikro::create();
 }
 
 /**
