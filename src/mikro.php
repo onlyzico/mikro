@@ -32,7 +32,7 @@ class Mikro
     /**
      * @var string
      */
-    protected $requestUri;
+    protected $requestPath;
 
     /**
      * @var array
@@ -304,13 +304,21 @@ class Mikro
     }
 
     /**
-     * @param string $uri
+     * @return string
+     */
+    public function getRequestUri()
+    {
+        return parse_url(arr_get($_SERVER, 'REQUEST_URI'), PHP_URL_PATH);
+    }
+
+    /**
+     * @param string $path
      *
      * @return void
      */
-    public function setRequestUri(string $uri)
+    public function setRequestPath(string $path)
     {
-        $this->requestUri = $uri;
+        $this->requestPath = $path;
     }
 
     /**
@@ -318,16 +326,9 @@ class Mikro
      *
      * @return string
      */
-    public function getRequestUri(bool $clean = true)
+    public function getRequestPath(bool $clean = true)
     {
-        $uri = parse_url(arr_get($_SERVER, 'REQUEST_URI'), PHP_URL_PATH);
-        $path = $this->getBasePath();
-
-        if ($clean) {
-            return preg_replace('/\/\/+/', '/', trim(str_replace(trim($path, '/'), '', $uri), '/'));
-        }
-
-        return $path !== '/' ? str_replace($path, '', $uri) : $uri;
+        return preg_replace('/\/\/+/', '/', trim(str_replace(trim($this->getBasePath(), '/'), '', $this->getRequestUri()), '/'));
     }
 
     /**
@@ -460,31 +461,35 @@ class Mikro
      *
      * @return string|null
      */
-    public function getRouteUrl(string $name, array $params = [])
+    public function getRoutePath(string $name, array $params = [])
     {
         if ($route = $this->getRoute($name)) {
-            $uri = preg_replace('~{.*?:(.*?)}~', '{$1}', $route['pattern']);
-            $uri = preg_replace('~\((.*?)\)~', '{$1}', $uri);
+            $path = $route['pattern'];
 
-            if (preg_match_all('~\{.*?\}~', $uri, $matches)) {
-                $i = $j = 0;
-
-                foreach (array_shift($matches) as $value) {
-                    $key = preg_replace('~{(.*?)}~', '$1', $value);
-                    
-                    if (isset($params[$key]) && ! is_array($params[$key])) {
-                        $uri = preg_replace('~' . preg_quote($value) . '~', $params[$key], $uri, 1);
-                    } elseif (isset($params[$key][$j]) && ! is_array($params[$key][$i])) {
-                        $uri = preg_replace('~' . preg_quote($value) . '~', $params[$key][$j], $uri, 1);
-                        $i++;
-                    } elseif (isset($params[$i])) {
-                        $uri = preg_replace('~' . preg_quote($value, '/') . '~', $params[$j], $uri, 1);
-                        $j++;
+            foreach ($params as $key => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $val) {
+                        $path = preg_replace("~\{{$key}\}~", $val, $path, 1);
                     }
+                } else {
+                    $path = preg_replace("~\{{$key}\}~", $value, $path, 1);
                 }
             }
 
-            return site_url($uri);
+            return $path;
+        }
+    }
+
+    /**
+     * @param string $name
+     * @param array $params
+     *
+     * @return string|null
+     */
+    public function getRouteUrl(string $name, array $params = [])
+    {
+        if ($path = $this->getRoutePath($name, $params)) {
+            return site_url($path);
         }
     }
     
@@ -858,7 +863,11 @@ class Mikro
     {
         $this->route = $this->matchRoute();
 
-        call_user_func_array($this->route['callback'], [$this]);
+        $response = call_user_func_array($this->route['callback'], [$this]);
+
+        if (is_array($response)) {
+            $response = $this->json($response);
+        }
     }
 
     /**
@@ -887,11 +896,7 @@ class Mikro
         }
 
         if ( ! is_null($body = $this->body)) {
-            if (is_array($body)) {
-                dd($body, false);
-            } else {
-                echo $body;
-            }
+            echo $body;
         }
     }
 }
