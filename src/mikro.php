@@ -126,7 +126,7 @@ class Mikro
     public function getBaseDir(string $path = null)
     {
         if (is_null($this->baseDir)) {
-            $this->baseDir = dirname(arr_get($_SERVER, 'SCRIPT_FILENAME'));
+            $this->baseDir = getcwd();
         }
 
         return rtrim($this->baseDir . '/' . $path, '/');
