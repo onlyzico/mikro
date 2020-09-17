@@ -209,17 +209,27 @@ class Mikro
     }
 
     /**
-     * @param string|string[] $path
+     * @param string $path
      *
      * @return void
      */
     public function setAutoloadPath($path)
     {
-        $this->autoloadPaths = array_merge($this->autoloadPaths, (array) $path);
+        $this->autoloadPaths[] = $path;
     }
 
     /**
-     * @param string|string[] $aliases
+     * @param string[] $paths
+     *
+     * @return void
+     */
+    public function setAutoloadPaths($paths)
+    {
+        $this->autoloadPaths = array_merge($this->autoloadPaths, $paths);
+    }
+
+    /**
+     * @param array $aliases
      *
      * @return void
      */
