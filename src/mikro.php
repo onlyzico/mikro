@@ -378,6 +378,8 @@ class Mikro
      */
     public function match(array $methods, string $pattern, ...$args)
     {
+        $methods = array_map('strtoupper', $methods);
+
         foreach ($methods as $method) {
             if ( ! $this->isHttpMethodExists($method)) {
                 throw new \ErrorException("Invalid route method [{$method}].");
@@ -916,19 +918,25 @@ class Mikro
     {
         $this->route = $this->matchRoute();
 
-        $response = call_user_func_array($this->route['callback'], [$this]);
-
-        if (is_array($response)) {
-            $response = $this->json($response);
-        } elseif (is_string($response)) {
-            $response = $this->body($response);
+        if ( ! in_array('ANY', $this->route['method']) &&  ! in_array($this->getHttpMethod(), $this->route['method'])) {
+            $response = $this->status(405);
         }
 
-        if ($actions = $this->actions) {
-            foreach ($actions as $action) {
-                if ( ! in_array($action['name'], arr_get($this->route, 'except_actions', [])) && ($action['global'] || in_array($action['name'], arr_get($this->route, 'actions', [])))) {
-                    if ( ! is_null($actionResponse = call_user_func_array($action['callback'], [$this]))) {
-                        $response = $actionResponse;
+        if ( ! isset($response)) {
+            $response = call_user_func_array($this->route['callback'], [$this]);
+
+            if (is_array($response)) {
+                $response = $this->json($response);
+            } elseif (is_string($response)) {
+                $response = $this->body($response);
+            }
+
+            if ($actions = $this->actions) {
+                foreach ($actions as $action) {
+                    if ( ! in_array($action['name'], arr_get($this->route, 'except_actions', [])) && ($action['global'] || in_array($action['name'], arr_get($this->route, 'actions', [])))) {
+                        if ( ! is_null($actionResponse = call_user_func_array($action['callback'], [$this]))) {
+                            $response = $actionResponse;
+                        }
                     }
                 }
             }
