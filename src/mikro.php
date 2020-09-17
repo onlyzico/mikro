@@ -611,7 +611,10 @@ class Mikro
     public function nextRoute($name)
     {
         if ($route = $this->getRoute($name)) {
+            $params = arr_get($this->route, 'params', []);
+
             $this->route = array_replace($this->route, $route);
+            $this->route['params'] = $params;
             
             return call_user_func_array($this->route['callback'], [$this]);
         }
