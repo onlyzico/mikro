@@ -47,6 +47,11 @@ class Mikro
     /**
      * @var array
      */
+    protected $actions = [];
+
+    /**
+     * @var array
+     */
     protected $routePatterns = [
         '{any}' => '([^/]+)',
         '{num}' => '(\d+)',
@@ -495,6 +500,48 @@ class Mikro
             return site_url($path);
         }
     }
+
+    /**
+     * @param string $method
+     * @param callback $pattern
+     * @param bool $global
+     *
+     * @return void
+     */
+    public function action(string $name, $callback, bool $global = false)
+    {
+        $this->actions[] = compact('name', 'callback', 'global');
+    }
+
+    /**
+     * @param string|string[] $name
+     *
+     * @return \Mikro\Mikro
+     */
+    public function withAction($name)
+    {
+        $route = array_pop($this->routes);
+        $route['actions'] = array_merge(arr_get($route, 'actions', []), (array) $name);
+
+        $this->routes[] = $route;
+
+        return $this;
+    }
+
+    /**
+     * @param string|string[] $name
+     *
+     * @return \Mikro\Mikro
+     */
+    public function exceptAction($name)
+    {
+        $route = array_pop($this->routes);
+        $route['except_actions'] = array_merge(arr_get($route, 'except_actions', []), (array) $name);
+
+        $this->routes[] = $route;
+
+        return $this;
+    }
     
     /**
      * @return array
@@ -870,6 +917,16 @@ class Mikro
 
         if (is_array($response)) {
             $response = $this->json($response);
+        }
+
+        if ($actions = $this->actions) {
+            foreach ($actions as $action) {
+                if ( ! in_array($action['name'], arr_get($this->route, 'except_actions', [])) && ($action['global'] || in_array($action['name'], arr_get($this->route, 'actions', [])))) {
+                    if ( ! is_null($actionResponse = call_user_func_array($action['callback'], [$this]))) {
+                        $response = $actionResponse;
+                    }
+                }
+            }
         }
     }
 
