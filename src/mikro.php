@@ -821,6 +821,42 @@ class Mikro
     }
 
     /**
+     * @param string $key
+     * @param mixed $value
+     *
+     * @return \Mikro\Mikro
+     */
+    public function data(string $key, $value)
+    {
+        $this->data[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed|null $fallback
+     *
+     * @return mixed|null
+     */
+    public function getData(string $key, $fallback = null)
+    {
+        return arr_get($this->data, $key, $fallback);
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return \Mikro\Mikro
+     */
+    public function removeData(string $key)
+    {
+        arr_erase($this->data, $key);
+
+        return $this;
+    }
+
+    /**
      * @param mixed $body
      * @param int $status
      *
