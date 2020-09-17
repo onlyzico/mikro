@@ -76,7 +76,7 @@ function site_url(string $uri = null)
  */
 function current_url()
 {
-    return site_url(mikro()->getRequestUri());
+    return site_url(mikro()->getRequestPath());
 }
 
 /**
