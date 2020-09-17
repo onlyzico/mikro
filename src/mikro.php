@@ -308,7 +308,10 @@ class Mikro
      */
     public function getRequestUri()
     {
-        return parse_url(arr_get($_SERVER, 'REQUEST_URI'), PHP_URL_PATH);
+        $uri = parse_url(arr_get($_SERVER, 'REQUEST_URI'), PHP_URL_PATH);
+        $path = $this->getBasePath();
+
+        return $path !== '/' ? str_replace($path, '', $uri) : $uri;
     }
 
     /**
