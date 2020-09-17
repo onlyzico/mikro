@@ -466,10 +466,11 @@ class Mikro
     /**
      * @param string $name
      * @param array $params
+     * @param bool $full
      *
      * @return string|null
      */
-    public function getRoutePath(string $name, array $params = [])
+    public function getRoutePath(string $name, array $params = [], $full = true)
     {
         if ($route = $this->getRoute($name)) {
             $path = $route['pattern'];
@@ -484,7 +485,7 @@ class Mikro
                 }
             }
 
-            return $path;
+            return $full ? url_path($path) : $path;
         }
     }
 
@@ -496,7 +497,7 @@ class Mikro
      */
     public function getRouteUrl(string $name, array $params = [])
     {
-        if ($path = $this->getRoutePath($name, $params)) {
+        if ($path = $this->getRoutePath($name, $params, false)) {
             return site_url($path);
         }
     }
@@ -917,6 +918,8 @@ class Mikro
 
         if (is_array($response)) {
             $response = $this->json($response);
+        } elseif (is_string($response)) {
+            $response = $this->body($response);
         }
 
         if ($actions = $this->actions) {
