@@ -40,6 +40,16 @@ class Mikro
     protected $httpMethods = ['GET', 'POST', 'ANY'];
 
     /**
+     * @var callable
+     */
+    protected $beforeStart;
+
+    /**
+     * @var callable
+     */
+    protected $afterStart;
+
+    /**
      * @var array
      */
     protected $routes = [];
@@ -952,6 +962,10 @@ class Mikro
      */
     public function start()
     {
+        if (is_callable($this->beforeStart)) {
+            call_user_func_array($this->beforeStart, [$this]);
+        }
+
         $this->route = $this->matchRoute();
 
         if ( ! in_array('ANY', $this->route['method']) &&  ! in_array($this->getHttpMethod(), $this->route['method'])) {
@@ -976,6 +990,10 @@ class Mikro
                     }
                 }
             }
+        }
+
+        if (is_callable($this->afterStart)) {
+            call_user_func_array($this->afterStart, [$this]);
         }
     }
 
