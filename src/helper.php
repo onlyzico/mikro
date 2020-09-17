@@ -202,6 +202,18 @@ function file_get(string $filePath)
 }
 
 /**
+ * @param string $filePath
+ *
+ * @return mixed|null
+ */
+function file_load(string $filePath)
+{
+    if (is_readable($filePath)) {
+        require_once $filePath;
+    }
+}
+
+/**
  * @param mixed $data
  * @param bool $exit
  *

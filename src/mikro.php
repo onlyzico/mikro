@@ -243,6 +243,18 @@ class Mikro
      *
      * @return void
      */
+    public function autoloadFiles($path)
+    {
+        foreach (glob($path . '/*.php') as $filePath) {
+            file_load($filePath);
+        }
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return void
+     */
     public function setViewsPath(string $path)
     {
         $this->viewsPath = $path;
