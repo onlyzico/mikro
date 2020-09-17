@@ -867,6 +867,8 @@ class Mikro
             throw new \ErrorException("View template [{$path}] doesn't exists.");
         }
 
+        $this->data = array_replace_recursive($this->data, $data);
+
         ob_start();
 
         $this->template($path, $data);
