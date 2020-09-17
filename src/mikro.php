@@ -42,12 +42,12 @@ class Mikro
     /**
      * @var callable
      */
-    public $beforeStart;
+    protected $beforeStart;
 
     /**
      * @var callable
      */
-    public $afterStart;
+    protected $afterStart;
 
     /**
      * @var array
@@ -955,6 +955,26 @@ class Mikro
     public function removeBody()
     {
         return $this->body(null);
+    }
+
+    /**
+     * @param callable $callback
+     *
+     * @return void
+     */
+    public function beforeStart($callback)
+    {
+        $this->beforeStart = $callback;
+    }
+
+    /**
+     * @param callable $callback
+     *
+     * @return void
+     */
+    public function afterStart($callback)
+    {
+        $this->afterStart = $callback;
     }
 
     /**
