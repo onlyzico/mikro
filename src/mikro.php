@@ -499,14 +499,14 @@ class Mikro
     public function matchRoute()
     {
         $routes = $this->getRoutes();
-        $requestUri = $this->requestUri ?: $this->getRequestUri();
+        $requestPath = $this->requestPath ?: $this->getRequestPath();
 
         foreach ($routes as $route) {
-            if (trim($route['pattern'], '/') === $requestUri) {
+            if (trim($route['pattern'], '/') === $requestPath) {
                 return $route;
             }
 
-            if (preg_match('~^' . strtr($route['pattern'], $this->routePatterns) . '$~', $requestUri, $matches)) {
+            if (preg_match('~^' . strtr($route['pattern'], $this->routePatterns) . '$~', $requestPath, $matches)) {
                 array_shift($matches);
 
                 $route['params'] = $matches;
@@ -875,7 +875,7 @@ class Mikro
      */
     public function run()
     {
-        if (($uri = $this->getRequestUri(false)) !== '/' && (preg_match('/\/\/+/', $uri) || preg_match('/\/$/i', $uri))) {
+        if (($uri = $this->getRequestUri()) !== '/' && (preg_match('/\/\/+/', $uri) || preg_match('/\/$/i', $uri))) {
             $this->redirect(full_url(), 301);
         } else {
             $this->start();
