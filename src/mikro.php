@@ -42,12 +42,12 @@ class Mikro
     /**
      * @var callable
      */
-    protected $beforeStart;
+    public $beforeStart;
 
     /**
      * @var callable
      */
-    protected $afterStart;
+    public $afterStart;
 
     /**
      * @var array
