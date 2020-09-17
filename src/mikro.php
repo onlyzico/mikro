@@ -957,7 +957,13 @@ class Mikro
      */
     public function template(string $path, array $data = [])
     {
-        if (is_readable($filePath = $this->getBaseDir() . "/" . $this->getViewsPath() . "/{$path}.php")) {
+        $filePath = $this->getBaseDir() . "/" . $this->getViewsPath() . "/{$path}.php";
+        
+        if (substr($path, 0, 1) === '/') {
+            $filePath = $this->getBaseDir() . "{$path}.php";
+        }
+
+        if (is_readable($filePath)) {
             $data = array_replace_recursive($this->data, $data);
 
             extract($data);
